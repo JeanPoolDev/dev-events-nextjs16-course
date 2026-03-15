@@ -24,7 +24,7 @@ interface MongooseCache {
  * our custom cache property without casting to `any`.
  */
 declare global {
-  // eslint-disable-next-line no-var
+
   var mongoose: MongooseCache | undefined;
 }
 
@@ -53,6 +53,14 @@ export async function connectToDatabase(): Promise<Mongoose> {
 
   // If no connection attempt is in progress, start one.
   if (!cached.promise) {
+
+    if (!MONGODB_URI) {
+      throw new Error(
+        'Porfavor define el MONGODOB_URI environment varible inside .env.local'
+      );
+    }
+
+
     const opts: mongoose.ConnectOptions = {
       bufferCommands: false, // Fail fast rather than queuing ops while disconnected.
     };
