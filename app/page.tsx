@@ -3,7 +3,6 @@ import ExplorerBtn from "@/components/ExplorerBtn";
 import { IEvent } from "@/database";
 import { cacheLife } from "next/cache";
 
-
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const Page = async () => {
@@ -11,6 +10,9 @@ const Page = async () => {
   cacheLife('hours');
 
   const response = await fetch(`${BASE_URL}api/events`);
+
+  console.log('response', response);
+
   const { events } = await response.json();
 
   return (
