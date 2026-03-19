@@ -1,0 +1,29 @@
+'use server';
+
+import { Event } from "@/database";
+import { connectToDatabase } from "../mongodb";
+
+
+export const getSimilarEventsBySlug = async (slug: string) => {
+  try {
+    await connectToDatabase();
+
+    const event = await Event.findOne({ slug }).lean();
+
+    if (!event) return [];
+
+    const similarEvents = await Event.find({
+      _id: { $ne: event._id },
+      tags: { $in: event.tags }
+    }).lean()
+
+    return similarEvents.map(ev => ({
+      ...ev,
+      _id: ev._id.toString()
+    }))
+
+  } catch {
+    return [];
+  }
+}
+
